@@ -1,4 +1,4 @@
-const http = require('http');
+const http = require('https');
 const exec = require('child_process').exec;
 const fs = require('fs');
 const program = require('commander');
@@ -89,7 +89,7 @@ function okForDownload(link){
         }
     }
     
-    	
+
     if(res && program.part != 'all'){
         if(program.part == '1er'){
             if(link.indexOf('premiere') == -1){
@@ -110,15 +110,21 @@ var req = http.get({host: 'www.tf1.fr', path: '/tmc/quotidien-avec-yann-barthes/
         bodyChunks.push(chunk);
     }).on('end', function () {
         var body = Buffer.concat(bodyChunks).toString();
+        fs.writeFileSync('test.html', body);
         var results = body.match(/<a href="\/tmc\/quotidien-avec-yann-barthes\/videos\/quotidien-(\w*)-partie-(\d*)-(\w*)-(\d*).html" class="link videoLink trackXiti testCSA"/gi);
         var links = [];
-        for (var result in results) links.push('http://www.tf1.fr' + results[result].replace('<a href="', '').replace('" class="link videoLink trackXiti testCSA"', ''));
-            var next = function(){
-                if(links.length == 0){ return; }
-                var link = links.pop();
-                if(okForDownload(link)){
-                    console.log('Init download of', link);
-                    startDL(link, next);
+        for (var result in results){
+            links.push('http://www.tf1.fr' + results[result].replace('<a href="', '').replace('" class="link videoLink trackXiti testCSA"', ''));
+        } 
+        if(links.length == 0)
+            console.error("No links found");
+
+        var next = function(){
+            if(links.length == 0){ return; }
+            var link = links.pop();
+            if(okForDownload(link)){
+                console.log('Init download of', link);
+                startDL(link, next);
                     //next();
                 }else{
                     next();
