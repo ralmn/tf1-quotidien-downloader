@@ -110,10 +110,11 @@ var req = http.get({host: 'www.tf1.fr', path: '/tmc/quotidien-avec-yann-barthes/
         bodyChunks.push(chunk);
     }).on('end', function () {
         var body = Buffer.concat(bodyChunks).toString();
-        var results = body.match(/<a href="\/tmc\/quotidien-avec-yann-barthes\/videos\/quotidien-(\w*)-partie-(\d*)-(\w*)-(\d*).html" class="link videoLink trackXiti testCSA"/gi);
+        var results = body.match(/<a href="(?:https:\/\/www.tf1.fr)?\/tmc\/quotidien-avec-yann-barthes\/videos\/quotidien-(\w*)-partie-(\d*)-(\w*)-(\d*).html/gi);
+        
         var links = [];
         for (var result in results){
-            links.push('http://www.tf1.fr' + results[result].replace('<a href="', '').replace('" class="link videoLink trackXiti testCSA"', ''));
+            links.push('http://www.tf1.fr' + results[result].replace('<a href="', '').replace('https://www.tf1.fr', '').replace('" class="link videoLink trackXiti testCSA"', ''));
         } 
         if(links.length == 0)
             console.error("No links found");
