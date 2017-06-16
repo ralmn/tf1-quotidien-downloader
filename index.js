@@ -110,7 +110,6 @@ var req = http.get({host: 'www.tf1.fr', path: '/tmc/quotidien-avec-yann-barthes/
         bodyChunks.push(chunk);
     }).on('end', function () {
         var body = Buffer.concat(bodyChunks).toString();
-        fs.writeFileSync('test.html', body);
         var results = body.match(/<a href="\/tmc\/quotidien-avec-yann-barthes\/videos\/quotidien-(\w*)-partie-(\d*)-(\w*)-(\d*).html" class="link videoLink trackXiti testCSA"/gi);
         var links = [];
         for (var result in results){
