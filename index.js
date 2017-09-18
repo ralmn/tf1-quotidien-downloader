@@ -41,7 +41,7 @@ var outDir = program.out;
 function startDL(link, cb) {
     child = exec("youtube-dl -f mp4 -s --get-filename " + link, function (err, stdout, stderr) {
         if (!err) {
-            var filename = stdout.replace(/ /g, '_').replace(/,/g, '').replace('\n', '');
+            var filename = require('diacritics').remove(stdout.replace(/ /g, '_').replace(/,/g, '').replace('\n', ''));
             var filePath = path.join(outDir, filename);
             fs.access(filePath, fs.F_OK, function (err) {
                 if (err != null) {
