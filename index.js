@@ -76,7 +76,7 @@ function extractDate(link){
     var indexStartDate = link.indexOf('-partie-') + 8;
     var indexEndDate = link.indexOf('.html');
 
-    var strDate = link.substring(indexStartDate, indexEndDate).replace('fevrier', 'février');
+    var strDate = link.substring(indexStartDate, indexEndDate).replace('fevrier', 'février').replace('decembre', 'décembre');
     return moment(strDate, 'DD-MMMM-YYYY');
 }
 
